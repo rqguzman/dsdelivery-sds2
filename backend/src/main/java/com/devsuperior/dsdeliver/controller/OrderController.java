@@ -6,7 +6,9 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -21,28 +23,32 @@ public class OrderController {
 
 	@Autowired
 	private OrderService orderService;
-	
+
 	@GetMapping
-	public ResponseEntity<List<OrderDTO>> findAll(){
-		
+	public ResponseEntity<List<OrderDTO>> findAll() {
+
 		List<OrderDTO> list = orderService.findAll();
-		
+
 		return ResponseEntity.ok().body(list);
 	}
 
 	@PostMapping
-	public ResponseEntity<OrderDTO> insert(@RequestBody OrderDTO theOrderDTO){
-		
+	public ResponseEntity<OrderDTO> insert(@RequestBody OrderDTO theOrderDTO) {
+
 		theOrderDTO = orderService.insert(theOrderDTO);
-		
+
 		URI uri = ServletUriComponentsBuilder.fromCurrentRequest()
-				.path("/{id}")
-				.buildAndExpand(theOrderDTO.getId())
-				.toUri();
-		
+				.path("/{id}").buildAndExpand(theOrderDTO.getId()).toUri();
+
 		return ResponseEntity.created(uri).body(theOrderDTO);
 	}
-	
-	
-	
+
+	@PutMapping("/{theId}/delivered")
+	public ResponseEntity<OrderDTO> setDelivered(@PathVariable Long theId) {
+
+		OrderDTO theOrderDTO = orderService.setDelivered(theId);
+		
+		return ResponseEntity.ok(theOrderDTO);
+	}
+
 }
