@@ -22,7 +22,7 @@ type Props = {
   onChangeLocation: (location: OrderLocationData) => void;
 }
 
-function OrderLocation ({ onChangeLocation: onChangeLocation }: Props) {
+function OrderLocation ({ onChangeLocation }: Props) {
 
   const [address, setAddress] = useState<Place>({
     position: initialPosition
